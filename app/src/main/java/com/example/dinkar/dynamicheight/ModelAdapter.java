@@ -1,9 +1,12 @@
 package com.example.dinkar.dynamicheight;
 
 import android.content.Context;
+import android.graphics.Point;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -21,6 +24,7 @@ class ModelAdapter extends RecyclerView.Adapter<ModelAdapter.MyViewHolder> {
     public ModelAdapter(List<Model> modelList, Context context) {
         this.modelList = modelList;
         this.context = context;
+
     }
 
     @NonNull
@@ -28,8 +32,14 @@ class ModelAdapter extends RecyclerView.Adapter<ModelAdapter.MyViewHolder> {
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View itemView = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.list_item, viewGroup, false);
-
-        return new MyViewHolder(itemView);
+        MyViewHolder myViewHolder = new MyViewHolder(itemView);
+        for (Model m : modelList) {
+            currentItemHeight = getHeightOfLargestDescription(context, m.description, myViewHolder.description);
+            if (currentItemHeight > highestHeight) {
+                highestHeight = currentItemHeight;
+            }
+        }
+        return myViewHolder;
 
     }
 
@@ -39,22 +49,7 @@ class ModelAdapter extends RecyclerView.Adapter<ModelAdapter.MyViewHolder> {
         Model data = modelList.get(i);
         viewHolder.title.setText(data.title);
         viewHolder.description.setText(data.description);
-        viewHolder.description.post(new Runnable() {
-            @Override
-            public void run() {
-                currentItemHeight = viewHolder.description.getMeasuredHeight();
-                if (currentItemHeight > highestHeight) {
-                    highestHeight = currentItemHeight;
-                    /** this is needed to make sure already inflated view with small description also get resized to largest view till now
-                     *and this be called only if the new view is of larger size then all of the view inflated till now
-                     */
-                    notifyDataSetChanged();
-                }
-                viewHolder.description.setHeight(highestHeight);
-            }
-        });
-
-
+        viewHolder.description.setHeight(highestHeight);
     }
 
     @Override
@@ -76,5 +71,17 @@ class ModelAdapter extends RecyclerView.Adapter<ModelAdapter.MyViewHolder> {
         }
     }
 
+    public static int getHeightOfLargestDescription(final Context context, final CharSequence text, TextView textView) {
+        final WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        final Point displaySize = new Point();
+        wm.getDefaultDisplay().getSize(displaySize);
+        final int deviceWidth = displaySize.x;
+        textView.setTypeface(Typeface.DEFAULT);
+        textView.setText(text, TextView.BufferType.SPANNABLE);
+        int widthMeasureSpec = View.MeasureSpec.makeMeasureSpec(deviceWidth, View.MeasureSpec.AT_MOST);
+        int heightMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+        textView.measure(widthMeasureSpec, heightMeasureSpec);
+        return textView.getMeasuredHeight();
+    }
 
 }
