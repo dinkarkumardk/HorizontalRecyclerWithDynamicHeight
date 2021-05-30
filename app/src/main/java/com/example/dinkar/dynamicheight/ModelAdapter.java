@@ -60,7 +60,7 @@ class ModelAdapter extends RecyclerView.Adapter<ModelAdapter.MyViewHolder> {
         viewHolder.title.setText(data.title);
         viewHolder.description.setText(data.description);
         viewHolder.position.setText("CurrentPositionInList : " + i);
-        viewHolder.button.setOnClickListener(v -> itemOnClickListener.onItemClick(data));
+        viewHolder.button.setOnClickListener(v -> itemOnClickListener.onItemClick(i));
     }
 
     @Override
@@ -90,6 +90,6 @@ class ModelAdapter extends RecyclerView.Adapter<ModelAdapter.MyViewHolder> {
 
 
     interface ItemOnClickListener {
-        void onItemClick(Model model);
+        void onItemClick(int position);
     }
 }

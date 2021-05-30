@@ -39,16 +39,16 @@ public class MainActivity extends AppCompatActivity implements ModelAdapter.Item
         products = new Products(modelList);
     }
 
-    void onButtonClick(Model model) {
+    void onButtonClick(int position) {
         Collections.shuffle(modelList);
         products.setModels(modelList);
-        recyclerView.scrollToPosition(modelList.indexOf(model));
+        recyclerView.scrollToPosition(position);
         ModelAdapter modelAdapter = new ModelAdapter(products, this, this);
         recyclerView.setAdapter(modelAdapter);
     }
 
     @Override
-    public void onItemClick(Model model) {
-        onButtonClick(model);
+    public void onItemClick(int position) {
+        onButtonClick(position);
     }
 }
