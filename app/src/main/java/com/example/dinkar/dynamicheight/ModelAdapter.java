@@ -19,12 +19,13 @@ class ModelAdapter extends RecyclerView.Adapter<ModelAdapter.MyViewHolder> {
     static final int TYPE_THREE = 3;
     static final int TYPE_FOUR = 4;
     static final int TYPE_FIVE = 5;
-    List<Model> modelList;
+    //List<Model> modelList;
+    Products products;
     Context context;
     ItemOnClickListener itemOnClickListener;
 
-    public ModelAdapter(List<Model> modelList, Context context, ItemOnClickListener itemOnClickListener) {
-        this.modelList = modelList;
+    public ModelAdapter(Products products, Context context, ItemOnClickListener itemOnClickListener) {
+        this.products = products;
         this.context = context;
         this.itemOnClickListener = itemOnClickListener;
 
@@ -51,27 +52,25 @@ class ModelAdapter extends RecyclerView.Adapter<ModelAdapter.MyViewHolder> {
                         .inflate(R.layout.list_item, viewGroup, false));
         }
 
-
     }
-
 
     @Override
     public void onBindViewHolder(final MyViewHolder viewHolder, int i) {
-        Model data = modelList.get(i);
+        Model data = products.getModels().get(i);
         viewHolder.title.setText(data.title);
         viewHolder.description.setText(data.description);
-        viewHolder.position.setText("CurrentPositionInList" + i);
+        viewHolder.position.setText("CurrentPositionInList : " + i);
         viewHolder.button.setOnClickListener(v -> itemOnClickListener.onItemClick(data));
     }
 
     @Override
     public int getItemCount() {
-        return modelList.size();
+        return products.getModels().size();
     }
 
     @Override
     public int getItemViewType(int position) {
-        return modelList.get(position).viewType;
+        return products.getModels().get(position).viewType;
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
@@ -86,8 +85,6 @@ class ModelAdapter extends RecyclerView.Adapter<ModelAdapter.MyViewHolder> {
             description = itemView.findViewById(R.id.description);
             position = itemView.findViewById(R.id.position_tv);
             button = itemView.findViewById(R.id.button);
-
-
         }
     }
 

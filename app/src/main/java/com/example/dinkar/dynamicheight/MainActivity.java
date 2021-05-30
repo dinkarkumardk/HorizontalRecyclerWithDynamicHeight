@@ -13,6 +13,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements ModelAdapter.ItemOnClickListener {
     private final List<Model> modelList = new ArrayList<>();
+    Products products;
     RecyclerView recyclerView;
 
     @Override
@@ -20,11 +21,12 @@ public class MainActivity extends AppCompatActivity implements ModelAdapter.Item
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         recyclerView = findViewById(R.id.recycler_view);
-        ModelAdapter modelAdapter = new ModelAdapter(modelList, this, this);
+        ModelDataPrepare();
+        ModelAdapter modelAdapter = new ModelAdapter(products, this, this);
         RecyclerView.LayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(modelAdapter);
-        ModelDataPrepare();
+
 
     }
 
@@ -34,12 +36,14 @@ public class MainActivity extends AppCompatActivity implements ModelAdapter.Item
         modelList.add(new Model("Title 3", "Large Description Large Description Large Description Large Description Large Description Large Description Large Description", 3));
         modelList.add(new Model("Title 4", "Medium Description Medium Description Medium Description Medium Description", 4));
         modelList.add(new Model("Title 5", "Small Description", 5));
+        products = new Products(modelList);
     }
 
     void onButtonClick(Model model) {
         Collections.shuffle(modelList);
+        products.setModels(modelList);
         recyclerView.scrollToPosition(modelList.indexOf(model));
-        ModelAdapter modelAdapter = new ModelAdapter(modelList, this, this);
+        ModelAdapter modelAdapter = new ModelAdapter(products, this, this);
         recyclerView.setAdapter(modelAdapter);
     }
 
