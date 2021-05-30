@@ -1,12 +1,10 @@
 package com.example.dinkar.dynamicheight;
 
 import android.content.Context;
-import android.graphics.Point;
-import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -16,30 +14,43 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 class ModelAdapter extends RecyclerView.Adapter<ModelAdapter.MyViewHolder> {
+    static final int TYPE_ONE = 1;
+    static final int TYPE_TWO = 2;
+    static final int TYPE_THREE = 3;
+    static final int TYPE_FOUR = 4;
+    static final int TYPE_FIVE = 5;
     List<Model> modelList;
     Context context;
-    int highestHeight = 0;
-    int currentItemHeight = 0;
+    ItemOnClickListener itemOnClickListener;
 
-    public ModelAdapter(List<Model> modelList, Context context) {
+    public ModelAdapter(List<Model> modelList, Context context, ItemOnClickListener itemOnClickListener) {
         this.modelList = modelList;
         this.context = context;
+        this.itemOnClickListener = itemOnClickListener;
 
     }
 
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View itemView = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.list_item, viewGroup, false);
-        MyViewHolder myViewHolder = new MyViewHolder(itemView);
-        for (Model m : modelList) {
-            currentItemHeight = getHeightOfLargestDescription(context, m.description, myViewHolder.description);
-            if (currentItemHeight > highestHeight) {
-                highestHeight = currentItemHeight;
-            }
+        switch (i) {
+            case TYPE_TWO:
+                return new MyViewHolder(LayoutInflater.from(viewGroup.getContext())
+                        .inflate(R.layout.list_item2, viewGroup, false));
+            case TYPE_THREE:
+                return new MyViewHolder(LayoutInflater.from(viewGroup.getContext())
+                        .inflate(R.layout.list_item3, viewGroup, false));
+            case TYPE_FOUR:
+                return new MyViewHolder(LayoutInflater.from(viewGroup.getContext())
+                        .inflate(R.layout.list_item4, viewGroup, false));
+            case TYPE_FIVE:
+                return new MyViewHolder(LayoutInflater.from(viewGroup.getContext())
+                        .inflate(R.layout.list_item5, viewGroup, false));
+            default:
+                return new MyViewHolder(LayoutInflater.from(viewGroup.getContext())
+                        .inflate(R.layout.list_item, viewGroup, false));
         }
-        return myViewHolder;
+
 
     }
 
@@ -49,7 +60,8 @@ class ModelAdapter extends RecyclerView.Adapter<ModelAdapter.MyViewHolder> {
         Model data = modelList.get(i);
         viewHolder.title.setText(data.title);
         viewHolder.description.setText(data.description);
-        viewHolder.description.setHeight(highestHeight);
+        viewHolder.position.setText("CurrentPositionInList" + i);
+        viewHolder.button.setOnClickListener(v -> itemOnClickListener.onItemClick(data));
     }
 
     @Override
@@ -57,31 +69,30 @@ class ModelAdapter extends RecyclerView.Adapter<ModelAdapter.MyViewHolder> {
         return modelList.size();
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView title, description;
-        LinearLayout parent;
+    @Override
+    public int getItemViewType(int position) {
+        return modelList.get(position).viewType;
+    }
 
+    class MyViewHolder extends RecyclerView.ViewHolder {
+        TextView title, description, position;
+        Button button;
+        LinearLayout parent;
 
         public MyViewHolder(View itemView) {
             super(itemView);
             parent = itemView.findViewById(R.id.parent);
             title = itemView.findViewById(R.id.title_tv);
             description = itemView.findViewById(R.id.description);
+            position = itemView.findViewById(R.id.position_tv);
+            button = itemView.findViewById(R.id.button);
+
 
         }
     }
 
-    public static int getHeightOfLargestDescription(final Context context, final CharSequence text, TextView textView) {
-        final WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        final Point displaySize = new Point();
-        wm.getDefaultDisplay().getSize(displaySize);
-        final int deviceWidth = displaySize.x;
-        textView.setTypeface(Typeface.DEFAULT);
-        textView.setText(text, TextView.BufferType.SPANNABLE);
-        int widthMeasureSpec = View.MeasureSpec.makeMeasureSpec(deviceWidth, View.MeasureSpec.AT_MOST);
-        int heightMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
-        textView.measure(widthMeasureSpec, heightMeasureSpec);
-        return textView.getMeasuredHeight();
-    }
 
+    interface ItemOnClickListener {
+        void onItemClick(Model model);
+    }
 }

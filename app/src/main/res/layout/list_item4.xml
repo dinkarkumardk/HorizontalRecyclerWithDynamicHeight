@@ -19,8 +19,15 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@android:drawable/btn_star_big_on" />
-
+            android:src="@android:drawable/btn_minus" />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/btn_minus" />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/btn_minus" />
         <TextView
             android:id="@+id/title_tv"
             android:layout_width="wrap_content"

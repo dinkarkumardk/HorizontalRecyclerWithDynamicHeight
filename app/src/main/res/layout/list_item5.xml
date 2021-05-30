@@ -16,19 +16,6 @@
 
         android:orientation="vertical">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@android:drawable/btn_star_big_on" />
-
-        <TextView
-            android:id="@+id/title_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textSize="25sp"
-            tools:text="Awesome" />
-
         <TextView
             android:id="@+id/description"
             android:layout_width="match_parent"
@@ -38,6 +25,30 @@
             android:padding="20dp"
             android:textSize="30sp"
             tools:text="Description" />
+
+
+        <TextView
+            android:id="@+id/title_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="25sp"
+            tools:text="Awesome" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/btn_radio" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/btn_radio" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/btn_radio" />
         <TextView
             android:id="@+id/position_tv"
             android:layout_width="wrap_content"
